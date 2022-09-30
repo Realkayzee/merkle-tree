@@ -1,7 +1,12 @@
 {
     "cSpell.ignoreWords": [
+        "IERC",
         "Merkle",
+        "inputed",
         "keccak",
-        "merkletreejs"
+        "merklecall",
+        "merkletreejs",
+        "nomicfoundation",
+        "userslist"
     ]
 }

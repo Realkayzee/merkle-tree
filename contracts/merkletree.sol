@@ -6,29 +6,32 @@ pragma solidity 0.8.9;
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 
 
-interface IGorrilaHead {
-    function safeMint(address to) external returns(uint256);
+interface TokenIERC20 {
+    function transfer(address to, uint256 amount) external returns(uint256);
 }
 
 
 
 contract Merkle{
-    IGorrilaHead nftAdd;
-    bytes32 public merkleRoot = 0x185622dc03039bc70cbb9ac9a4a086aec201f986b154ec4c55dad48c0a474e23;
+    TokenIERC20 tokenAddr;
+    bytes32 public merkleRoot = 0x7f2c343b62f283510e39def173f904324c6b30ee8d7af78ea00b3a493fbfd134;
 
     mapping(address => bool) whitelisted;
 
-    constructor(IGorrilaHead _nftAdd){
-        nftAdd = _nftAdd;
+    uint256 airdropPrice = 20e18;
+
+    constructor(TokenIERC20 _tokenAddr){
+        tokenAddr = _tokenAddr;
     }
 
 
     function WhitelistMint(bytes32[] calldata proof) public {
-        require(!whitelisted[msg.sender], "You have minted");
+        require(!whitelisted[msg.sender], "You have claimed");
 
         bytes32 leaf = keccak256(abi.encodePacked(msg.sender));
         require(MerkleProof.verify(proof, merkleRoot, leaf), "Invalid proof");
-        nftAdd.safeMint(msg.sender);
+        
+        tokenAddr.transfer(msg.sender, airdropPrice);
 
 
         whitelisted[msg.sender] = true;
